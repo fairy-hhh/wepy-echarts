@@ -1,0 +1,23 @@
+<style lang="less">
+@import url("../public/styles/base.less");
+
+</style>
+
+<template>
+    <view class="container">
+        财富测试结果页
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class Index extends wepy.page {
+    config = {
+        navigationBarTitleText: '测试结果',
+        disableScroll: true
+    }
+    methods = {
+       
+    }
+}
+</script>

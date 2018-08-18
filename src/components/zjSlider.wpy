@@ -1,0 +1,79 @@
+<style lang="less">
+@import url("../public/styles/base.less");
+slider{
+    margin: 20rpx 20rpx 20rpx 46rpx;
+}
+.section__title{
+    padding: 0 28rpx;
+    .tip{
+        .h4;
+        color: @font-color-3;
+    }
+}
+.disable-title, .disable-title .tip{
+    color: @font-color-4;
+}
+</style>
+
+<template>
+    <view class="section section_gap">
+        <view class="section__title hidden {{compData.disabled ? 'disable-title' : ''}}">
+            <text class="fl">{{compData.title}}</text>
+            <text class="fr">{{compData.slider || compData.default}}</text>
+        </view>
+        <view wx:if="{{compData.title2}}" class="section__title hidden {{compData.disabled ? 'disable-title' : ''}}">
+            <text class="fl">{{compData.title2}}<text wx:if="{{compData.tip}}" class="tip">{{compData.tip}}</text></text>
+            <text class="fr">{{compData.slider || compData.default}}</text>
+        </view>
+        <view class="body-view">
+            <slider @changing="sliderChanging" @change="sliderChange" activeColor="#4E7CEE" min="{{compData.min || 0}}" max="{{compData.max || 100}}" step="{{compData.step || 1}}" value="{{compData.value || 0}}" disabled="{{compData.disabled || false}}"/>
+        </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class ZjSlider extends wepy.component {
+    props = {
+        compData: {}
+    }
+    methods = {
+        sliderChanging(e) {
+            if (this.compData.specialType) {
+                this.getSlider(e.detail.value, this.compData.specialType)
+            } else {
+                this.compData.slider = e.detail.value + this.compData.unit
+            }
+            this.compData.value = e.detail.value
+        },
+        sliderChange(e) {
+            if (this.compData.specialType) {
+                this.getSlider(e.detail.value)
+            } else {
+                this.compData.slider = e.detail.value + this.compData.unit
+            }
+            this.compData.value = e.detail.value
+            this.$emit('sliderChange', e.detail.value)
+        }
+    }
+    getSlider = (value, type) => {
+        if (type && type == '1') {
+            // 0-10，每隔5万，到50；10-20，每隔25万，到300
+            if (value <= 10){
+                this.compData.slider = value * 5 + this.compData.unit
+            } else {
+                this.compData.slider = 50 + (value - 10) * 25 + this.compData.unit
+            }
+        }
+        if (type && type == '2') {
+            // 滑到最左端，显示2013年以前，滑到最右端，显示当年年份
+            if (value == 2013) {
+                this.compData.slider = 2013 + this.compData.unit + '以前'
+            } else {
+                this.compData.slider = value + this.compData.unit
+            }
+        }
+    }
+}
+</script>

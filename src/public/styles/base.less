@@ -1,0 +1,302 @@
+/* 定义变量 */
+@bg-color-main: #efeff4;
+@bg-color-1: #fff;
+@bg-color-2: #005EC0;
+@bg-color-3: #27BEEE;
+@bg-color-4: #4E7CEE;
+@bg-color-5: #80EDFB;
+
+@card-clor-1: #64CCFF;
+@card-clor-2: #FCACD6;
+@card-clor-3: #00ABFF;
+@card-clor-4: #FF9191;
+@card-clor-5: #4A90E2;
+@card-clor-6: #FE4E4E;
+
+@btn-bg: transparent;
+@btn-active-bg: #4E7CEE;
+@button-bg: #FFA700;
+@button-disable-bg: rgba(255, 167, 0, .3);
+
+@font-color-main: #053269;
+@font-color-btn: #4E7CEE;
+@font-color-1: #fff;
+@font-color-2: #333;
+@font-color-3: #666;
+@font-color-4: #999;
+
+@font-size-xs: 22rpx;
+@font-size-s: 24rpx;
+@font-size-normal: 28rpx;
+@font-size-m: 32rpx;
+@font-size-l: 36rpx;
+@font-size-xl: 40rpx;
+
+
+/* css reset */
+page {
+    width: 750rpx;
+    min-height: 100%;
+    background: @bg-color-main;
+    font-size: @font-size-normal;
+    color: @font-color-main;
+    font-family: 'PingFang Regular', 'Microsoft YaHei', '宋体', Arial, sans-serif;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+view{
+    box-sizing: border-box;
+}
+input {
+    outline: none;
+}
+a {
+    text-decoration: none;
+}
+img {
+    vertical-align: bottom;
+    max-width: 100%;
+}
+
+
+/* 常用字体样式 */
+.h5 {
+    font-size: @font-size-xs;
+}
+.h4 {
+    font-size: @font-size-s;
+}
+.h3{
+    font-size: @font-size-m;
+}
+.h2 {
+    font-size: @font-size-l;
+}
+.h1 {
+    font-size: @font-size-xl;
+}
+.bold {
+    font-weight: bold;
+}
+.tc {
+    text-align: center;
+}
+.tl {
+    text-align: left;
+}
+.tr {
+    text-align: right;
+}
+
+
+/* 边框，结合边框样式和颜色使用 */
+.border {
+    border-width: 1px;
+    border-style: solid;
+    border-color: @font-color-btn;
+}
+.solid {
+    border-style: solid;
+}
+.dashed {
+    border-style: dashed;
+}
+.no-top {
+    border-top: none;
+}
+.no-bottom {
+    border-bottom: none;
+}
+.no-left {
+    border-left: none;
+}
+.no-right {
+    border-right: none;
+}
+.border-top {
+    border-top-width: 1px;
+    border-top-style: solid;
+}
+.border-bottom {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+.border-left {
+    border-left-width: 1px;
+    border-left-style: solid;
+}
+.border-right {
+    border-right-width: 1px;
+    border-right-style: solid;
+}
+
+
+/* 圆角 */
+.br4 {
+    border-radius: 4px;
+}
+.br50 {
+    border-radius: 50%;
+}
+
+
+/* 常用width、height、margin、padding */
+.full-x {
+    width: 100%;
+}
+.full-y {
+    height: 100%;
+}
+.full {
+    width: 100%;
+    height: 100%;
+}
+.cover {
+    width: 750rpx;
+}
+.auto {
+    margin: 0 auto;
+}
+
+
+/* 常用图标大小 */
+.icon30 {
+    width: 30rpx;
+    height: 30rpx;
+}
+.icon50 {
+    width: 50rpx;
+    height: 50rpx;
+}
+.icon100 {
+    width: 100rpx;
+    height: 100rpx;
+}
+
+
+/* flex布局 */
+.row {
+    display: flex;
+    flex-direction: row;
+}
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* display样式 */
+.block, .show {
+    display: block;
+}
+.inline {
+    display: inline;
+}
+.inline-block {
+    display: inline-block;
+}
+.table {
+    display: table;
+}
+.cell {
+    display: table-cell;
+}
+.hide {
+    display: none;
+}
+
+
+/* 垂直对齐方式 */
+.va-top {
+    vertical-align: top;
+}
+.va-middle {
+    vertical-align: middle;
+}
+.va-bottom {
+    vertical-align: bottom;
+}
+.va-sub {
+    vertical-align: sub;
+}
+
+
+/* 定位 */
+.pr {
+    position: relative;
+}
+.pa {
+    position: absolute;
+}
+.pf {
+    position: fixed;
+}
+.hidden {
+    overflow: hidden;
+}
+
+
+/* 浮动、清除浮动 */
+.fr {
+    float: right;
+}
+.fl {
+    float: left;
+}
+.clear {
+    clear: both
+}
+.top0 {
+    top: 0;
+}
+.left0 {
+    left: 0;
+}
+.right0 {
+    right: 0;
+}
+.bottom0 {
+    bottom: 0;
+}
+
+
+/* 主要按钮样式 */
+.btn{
+    display: inline-block;
+    min-width: 200rpx;
+    height: 62rpx;
+    line-height: 62rpx;
+    text-align: center;
+    background: @btn-bg;
+    color: @font-color-btn;
+    .border;
+    border-radius: 30rpx;
+}
+.btn.line{
+    .block;
+    .auto;
+    width: 630rpx;
+}
+.btn.active{
+    background: @btn-active-bg;
+    color: @font-color-1;
+}
+
+.button-base{
+    width: 630rpx;
+    height: 94rpx;
+    line-height: 94rpx;
+    background: @button-bg;
+    color: @font-color-1;
+    border-radius: 46rpx;
+}
+.button{
+    .button-base;
+    .pf;
+    left: 60rpx;
+    bottom: 60rpx;
+}
+.button.disable{
+    background: @button-disable-bg;
+}

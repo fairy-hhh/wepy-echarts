@@ -1,0 +1,91 @@
+<style lang="less">
+  .userinfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .userinfo-avatar {
+    width: 80rpx;
+    height: 80rpx;
+    border-radius: 50%;
+  }
+
+  .userinfo-nickname {
+    color: #aaa;
+  }
+</style>
+<template>
+  <view class="container">
+    <view wx:if="{{!userInfo.id}}">
+        <button @tap="onLogin"> 登 录 </button>
+    </view>
+
+    <view wx:else class="userinfo">
+      <image class="userinfo-avatar" src="{{ head_image_sign }}" background-size="cover"/>
+      <view class="userinfo-nickname">{{ userInfo.nickname }}</view>
+    </view>
+
+    <button @tap="changeHead">修改头像</button>
+
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {GET, POST} from '@/utils/myfetch'
+  import {cdn_host} from '@/utils/host'
+  import Panel from '@/components/panel' // alias example
+  import List from '@/components/list' // aliasFields example
+  import Group from '@/components/group'
+  import Counter from 'counter' // alias example
+
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的'
+    }
+    components = {
+      panel: Panel,
+      counter1: Counter,
+      counter2: Counter,
+      list: List,
+      group: Group,
+    }
+
+    mixins = []
+
+    data = {
+        userInfo: {}
+    }
+
+    computed = {
+        head_image_sign() {
+            if (!this.userInfo.head_image_sign) {
+                return null
+            }
+            return cdn_host + '/pic/p80x80/' + this.userInfo.head_image_sign
+        }
+    }
+
+    methods = {
+      onLogin () {
+          this.$navigate('/pages/login')
+      },
+      changeHead () {
+          if (this.userInfo.head_image_sign == '891040615a97448660d04be6a7dab57b.jpg') {
+              this.userInfo.head_image_sign = '4a5d9ee7e063213551c30fb591d629f3.jpg'
+          } else {
+              this.userInfo.head_image_sign = '891040615a97448660d04be6a7dab57b.jpg'
+          }
+      }
+    }
+
+    events = {
+    }
+
+    onLoad() {
+        this.userInfo = this.$parent.globalData.userInfo
+    }
+  }
+</script>

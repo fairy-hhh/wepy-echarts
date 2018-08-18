@@ -1,0 +1,77 @@
+<style lang="less">
+@import url("../public/styles/base.less");
+page{
+    background: @bg-color-1;
+}
+text{
+    .block;
+    .tc;
+}
+.part1{
+    height: 586rpx;
+    background: linear-gradient(180deg, @bg-color-4, @bg-color-5);
+    padding: 36rpx 30rpx;
+    .card{
+        width: 690rpx;
+        height: 508rpx;
+        background: @bg-color-1;
+        border-radius: 18px;
+        image{
+            .full-x;
+            height: 380rpx;
+        }
+        .h2{
+            margin-top: 16rpx;
+        }
+    }
+}
+.part2{
+    padding-top: 98rpx;
+    line-height: 54rpx;
+}
+.button{
+    bottom: 112rpx;
+}
+.tip{
+    .pa;
+    bottom: 36rpx;
+}
+</style>
+
+<template>
+    <view class="container">
+        <view class="part1">
+            <view class="card">
+                <image src="../public/images/test/cover.png" class=""/>
+                <text class="h2">财商测试</text>
+                <text class="h5">第一阶段测试，预计两分钟完成</text>
+            </view>
+        </view>
+        <view class="part2">
+            <text>即将为您定制一份专属投资理财产品。</text>
+            <text>为了更好地了解您的投资方式和风险偏好，</text>
+            <text>请尽可能详实地完成财富问卷。</text>
+            <text>问卷不涉及个人敏感信息，请安心作答。</text>
+        </view>
+        <button class="button" @tap="start">开始测试</button>
+        <text class="h3 tip" @tap="back">先逛一逛</text>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class Index extends wepy.page {
+    config = {
+        navigationBarTitleText: '财富测试',
+        disableScroll: true
+    }
+    methods = {
+        start() {
+            this.$navigate('./chooseRole')
+        },
+        back() {
+            wepy.navigateBack()
+        }
+    }
+}
+</script>

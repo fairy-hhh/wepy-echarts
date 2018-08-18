@@ -1,0 +1,75 @@
+<style lang="less">
+.auth-btn {
+    background-color: blue;
+}
+</style>
+
+<template>
+  <view class="container">
+      <button wx:if="{{sk}}" class="auth-btn" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="userinfo"> 点击登录 </button>
+      <view wx:if="{{showText}}">请求失败！</view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {GET, POST} from '@/utils/myfetch'
+  import Tips from '@/utils/tip'
+
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '登录授权'
+    }
+    components = {
+    }
+
+    mixins = []
+
+    data = {
+        sk: null,
+        showText: false
+    }
+
+    methods = {
+      async userinfo ({detail}) {
+        let {res} = await POST('/weixin/applet/', {encryptedData: detail.encryptedData, iv: detail.iv, sk: this.sk})
+
+        let {res: userInfo} = await GET('/api/secret/get_user_info/', {user_id: 0})
+        Object.assign(this.$parent.globalData.userInfo, userInfo)
+
+        if (res.jump_url !== undefined) {
+            Tips.success('登录成功')
+            wepy.navigateBack({delta: 1})
+        } else {
+            Tips.error('登录失败')
+        }
+      }
+    }
+
+    events = {
+    }
+
+    async onLoad() {
+      Tips.loading()
+      try {
+          let {code} = await wepy.login()
+          let {res} = await GET('/weixin/applet/', {code: code})
+          if (res.sk) {
+              Tips.loaded()
+              this.sk = res.sk
+          } else if (res.jump_url !== undefined) {
+              let {res: userInfo} = await GET('/api/secret/get_user_info/', {user_id: 0})
+              Object.assign(this.$parent.globalData.userInfo, userInfo)
+              Tips.success('登录成功')
+              wepy.navigateBack({delta: 1})
+          }
+      } catch (e) {
+          this.showText = true
+          Tips.error('处理出错：', e)
+      } finally {
+          this.$apply()
+      }
+    }
+  }
+</script>

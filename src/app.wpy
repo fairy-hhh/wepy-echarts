@@ -1,0 +1,123 @@
+<style lang="less">
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+</style>
+
+<script>
+import wepy from 'wepy'
+import 'wepy-async-function'
+
+import {GET, POST, networkType} from '@/utils/myfetch'
+
+
+export default class extends wepy.app {
+  config = {
+    pages: [
+      'pages/index',
+      'pages/invest',
+      'pages/portfolio',
+      'pages/event',
+      'pages/mine',
+      'pages/login',
+      'pages/test',
+      'pages/test1',
+      'pages/testIntro',
+      'pages/chooseRole',
+      'pages/questions'
+    ],
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#4E7CEE',
+      navigationBarTitleText: '智君科技',
+      navigationBarTextStyle: '#fff'
+    },
+	tabBar: {
+		backgroundColor: "#fff",
+		color: "#7F8389",  
+		selectedColor: "#053269",
+		list: [
+		{
+			pagePath: "pages/index",
+			iconPath: "public/images/tab/index.png",
+			selectedIconPath: "public/images/tab/index_select.png",
+			text: "首页"
+		},
+		{
+			pagePath: "pages/invest",
+			iconPath: "public/images/tab/invest.png",
+			selectedIconPath: "public/images/tab/invest_select.png",
+			text: "投资"
+		},
+		{
+			pagePath: "pages/portfolio",
+			iconPath: "public/images/tab/portfolio.png",
+			selectedIconPath: "public/images/tab/portfolio_select.png",
+			text: "组合"
+		},
+		{
+			pagePath: "pages/event",
+			iconPath: "public/images/tab/event.png",
+			selectedIconPath: "public/images/tab/event_select.png",
+			text: "事件"
+		},
+		{
+			pagePath: "pages/mine",
+			iconPath: "public/images/tab/mine.png",
+			selectedIconPath: "public/images/tab/mine_select.png",
+			text: "我的"
+		}]
+	}
+  }
+
+  globalData = {
+      userInfo: {}
+  }
+
+  constructor () {
+    super()
+    this.use('requestfix')
+    this.use('promisify')
+  }
+
+  async onLaunch() {
+      await networkType()
+      try {
+          let {res, ext} = await GET('/api/secret/get_user_info/', {user_id: 0})
+          Object.assign(this.globalData.userInfo, res)
+          console.log(this.globalData.userInfo)
+      } catch (e) {
+          console.log('未登录', e)
+      }
+  }
+
+  isLogin() {
+      return this.globalData.userInfo.id > 0
+  }
+
+
+  async getUserInfo() {
+    const that = this
+    if (this.globalData.userInfo) {
+      return this.globalData.userInfo
+    }
+    let userInfo
+    try {
+      await wepy.login();
+      userInfo = await wepy.getUserInfo({lang: 'zh_CN'})
+    } catch (e) {
+      //console.log('error:', e)
+      console.log('需要授权登录')
+      return
+    }
+
+    that.globalData.userInfo = userInfo
+    return userInfo
+  }
+}
+</script>

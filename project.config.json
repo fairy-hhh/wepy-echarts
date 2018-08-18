@@ -1,0 +1,15 @@
+{
+	"description": "智君科技小程序",
+	"setting": {
+		"urlCheck": true,
+		"es6": false,
+		"postcss": false,
+		"minified": false,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"appid": "wx401bf742787b7d9c",
+	"projectname": "zhijuninvest",
+	"miniprogramRoot": "./dist",
+	"condition": {}
+}

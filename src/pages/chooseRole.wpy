@@ -1,0 +1,154 @@
+<style lang="less">
+@import url("../public/styles/base.less");
+.title{
+    height: 210rpx;
+    line-height: 210rpx;
+}
+swiper{
+    width: 750rpx;
+    height: 600rpx;
+}
+.swiper-card{
+    width: 630rpx;
+    height: 566rpx;
+    padding-top: 64rpx;
+    background:rgba(100,204,255,1);
+    box-shadow: 0px 0px 8px 8px rgba(5,50,105,0.1);
+    border-radius: 20rpx;
+    .role{
+        .block;
+        width: 328rpx;
+        height: 328rpx;
+        .auto;
+        .br50
+    }
+    .btns{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin-top: 62rpx;
+    }
+}
+.card1{ background: @card-clor-1; }
+.card2{ background: @card-clor-2; }
+.card3{ background: @card-clor-3; }
+.card4{ background: @card-clor-4; }
+.card5{ background: @card-clor-5; }
+.card6{ background: @card-clor-6; }
+.arrows{
+    color: @font-color-2;
+    width: 630rpx;
+    margin-top: 20rpx;
+    .arrow{
+        width: 26rpx;
+        height: 48rpx;
+        &.arrow-pre{
+            .fl;
+        }
+        &.arrow-next{
+            .fr;
+        }
+    }
+}
+</style>
+
+<template>
+    <view class="container">
+        <view class="h2 title">请选择一个角色</view>
+        <swiper
+            indicator-dots="{{false}}"
+            autoplay="{{false}}"
+            interval="5000"
+            duration="1000"
+            previous-margin="60rpx"
+            next-margin="30rpx"
+            current="{{current}}"
+            @change="swiperChange">
+            <block wx:for="{{imgUrls}}" wx:key="{{index}}">
+                <swiper-item>
+                    <view class="swiper-card {{'card' + (index + 1)}}">
+                        <image src="{{item}}" class="role"/>
+                        <view wx:if="{{index == 2 || index == 3}}" class="btns">
+                            <text class="btn {{hasOne ? 'active' : ''}}" @tap="chooseChild(1)">家有一孩</text>
+                            <text class="btn {{hasOne ? '' : 'active'}}" @tap="chooseChild(2)">家有两宝</text>
+                        </view>
+                    </view>
+                </swiper-item>
+            </block>
+        </swiper>
+        <view class="arrows tc h3">
+            {{role}}
+            <image src="../public/images/test/arrow-left.png" @tap="goPre" class="arrow arrow-pre"/>
+            <image src="../public/images/test/arrow-right.png" @tap="goNext" class="arrow arrow-next"/>
+            <!-- <text @tap="goPre" class="arrow arrow-pre">左箭头</text>
+            <text @tap="goNext" class="arrow arrow-next">右箭头</text> -->
+        </view>
+        <button class="button" @tap="confirm">确定</button>
+        <toast />
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import Toast from 'wepy-com-toast'
+
+export default class Index extends wepy.page {
+    config = {
+        navigationBarTitleText: '财富测试',
+        disableScroll: true
+    }
+    components = {
+        toast: Toast
+    }
+
+    data = {
+        imgUrls: [
+            'http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg',
+            'http://img06.tooopen.com/images/20160818/tooopen_sy_175866434296.jpg',
+            'http://img06.tooopen.com/images/20160818/tooopen_sy_175833047715.jpg',
+            'http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg',
+            'http://img06.tooopen.com/images/20160818/tooopen_sy_175866434296.jpg',
+            'http://img06.tooopen.com/images/20160818/tooopen_sy_175833047715.jpg'
+        ],
+        current: 0, // 当前选中第几个角色
+        hasOne: true, // 有一个孩子 or 有两个孩子
+        roles: [
+            '正太/小鲜肉','萝莉/小姐姐','奶爸/大叔','辣妈/御姐','大爷/知天命','大妈/逾半百'
+        ],
+        role: ''
+    }
+    onLoad() {
+        this.role = this.roles[0]
+    }
+    methods = {
+        goPre() {
+            if (this.current > 0) {
+                this.current--
+            }
+        },
+        goNext() {
+            if (this.current < this.roles.length - 1) {
+                this.current++
+            }
+        },
+        swiperChange(e) {
+            this.current = e.detail.current
+            this.role = this.roles[e.detail.current]
+        },
+        chooseChild(n) {
+            if (n == 1) {
+                this.hasOne = true
+            } else {
+                this.hasOne = false
+            }
+        },
+        confirm() {
+            let params = {role: this.current, hasChildren: false}
+            if (this.current == 3 || this.current == 2) {
+                params.hasChildren = this.hasOne ? 1 : 2
+            }
+            this.$navigate('./questions', params)
+        }
+    }
+}
+</script>

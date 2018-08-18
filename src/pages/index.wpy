@@ -1,0 +1,45 @@
+<style lang="less">
+@import url("../public/styles/base.less");
+</style>
+
+<template>
+    <view class="container">
+        <button @tap="toTest">图表</button>
+        <button @tap="toTest1">去测试</button>
+        <toast />
+    </view>
+</template>
+
+<script>
+import wepy from "wepy"
+import { GET, POST } from "@/utils/myfetch"
+import { cdn_host } from "@/utils/host"
+import Toast from "wepy-com-toast"
+
+export default class Index extends wepy.page {
+    config = {
+        navigationBarTitleText: "首页"
+    }
+    
+    components = {
+        toast: Toast
+    }
+
+    data = {
+        userInfo: {}
+    }
+
+    methods = {
+        toTest() {
+            this.$navigate('./test1')
+        },
+        toTest1() {
+            this.$navigate('./testIntro')
+        }
+    }
+
+    onLoad() {
+        this.userInfo = this.$parent.globalData.userInfo;
+    }
+}
+</script>

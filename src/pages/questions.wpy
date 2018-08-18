@@ -1,0 +1,462 @@
+<style lang="less">
+@import url("../public/styles/base.less");
+// page{
+//     height: 100%;
+//     background: linear-gradient(180deg,rgba(78,124,238,1),rgba(128,237,251,1));
+//     color: #fff;
+// }
+.box{
+    padding: 0 28rpx;
+}
+.back{
+    .pa;
+    .tc;
+    width: 694rpx;
+    bottom: 176rpx;
+    color: @font-color-btn;
+}
+.number{
+    font-size: 80rpx;
+    height: 112rpx;
+    line-height: 112rpx;
+}
+.section{
+    margin-bottom: 44rpx;
+}
+.title{
+    margin-bottom: 46rpx;
+    line-height: 50rpx;
+}
+.title-6{
+    margin-top: 100rpx;
+}
+.inner-box{
+    padding-left: 28rpx;
+    // 第三题
+    .part-3{
+        margin: 94rpx 0 18rpx 0;
+    }
+    .part-3:first-child{
+        margin-top: 48rpx;
+    }
+    .btn-3, .btn-6{
+        margin-right: 24rpx;
+    }
+    .btn-6{
+        margin-bottom: 40rpx;
+    }
+}
+.btn-b{
+    box-sizing: border-box;
+    height: 80rpx;
+    line-height: 80rpx;
+    border-radius: 40rpx;
+    padding: 0 40rpx;
+}
+.btn-7, .btn-8{
+    min-width: 372rpx;
+    margin-top: 90rpx;
+    .tl;
+}
+.btn-9{
+    min-width: 600rpx;
+    margin: 42rpx 0 0 18rpx;
+}
+</style>
+
+<template>
+    <view class="box">
+        <view>
+            <text class="number">{{current}}</text>
+            <text>/ 9</text>
+        </view>
+        <view class="h2">
+            <!-- 第一题 -->
+            <block wx:if="{{current == 1}}">
+                <view class="title">您希望为多少资金配置投资规划？</view>
+                <zjSlider1 :compData="compData1" @sliderChange.user="sliderChange"></zjSlider1>
+            </block>
+
+            <!-- 第二题 -->
+            <block wx:if="{{current == 2}}">
+                <view class="title">您如何配置投资产品？<text class="h4 fr">可配置金额{{remainMoney}}万</text></view>
+                <repeat for="{{compData2}}" key="index" index="index" item="item">
+                    <zjSlider2 :compData="item" @sliderChange.user="sliderChange"></zjSlider2>
+                </repeat>
+            </block>
+
+            <!-- 第三题 -->
+            <block wx:if="{{current == 3}}">
+                <view class="title">您会选择多长期限的产品？（可多选）</view>
+                <view class="inner-box">
+                    <view class="part-3">理财类</view>
+                    <view>
+                        <text class="btn btn-3 {{isChoosed3[0][0] ? 'active' : ''}}" @tap="threeChoose(0, 0)">随时可取</text>
+                        <text class="btn btn-3 {{isChoosed3[0][1] ? 'active' : ''}}" @tap="threeChoose(0, 1)">6个月左右</text>
+                        <text class="btn {{isChoosed3[0][2] ? 'active' : ''}}" @tap="threeChoose(0, 2)">一年以上</text>
+                    </view>
+                    <view class="part-3">公募基金</view>
+                    <view>
+                        <text class="btn btn-3 {{isChoosed3[1][0] ? 'active' : ''}}" @tap="threeChoose(1, 0)">1个月内</text>
+                        <text class="btn btn-3 {{isChoosed3[1][1] ? 'active' : ''}}" @tap="threeChoose(1, 1)">6个月左右</text>
+                        <text class="btn {{isChoosed3[1][2] ? 'active' : ''}}" @tap="threeChoose(1, 2)">一年以上</text>
+                    </view>
+                    <view class="part-3">股票</view>
+                    <view>
+                        <text class="btn btn-3 {{isChoosed3[2][0] ? 'active' : ''}}" @tap="threeChoose(2, 0)">短线技术</text>
+                        <text class="btn btn-3 {{isChoosed3[2][1] ? 'active' : ''}}" @tap="threeChoose(2, 1)">中线轮动</text>
+                        <text class="btn {{isChoosed3[2][2] ? 'active' : ''}}" @tap="threeChoose(2, 2)">长线价值</text>
+                    </view>
+                </view>
+            </block>
+
+            <!-- 第四题 -->
+            <block wx:if="{{current == 4}}">
+                <view class="title">您从哪一年开始投资？</view>
+                <repeat for="{{compData4}}" key="index" index="index" item="item">
+                    <zjSlider4 :compData="item" @sliderChange.user="sliderChange"></zjSlider4>
+                </repeat>
+            </block>
+
+            <!-- 第五题 -->
+            <block wx:if="{{current == 5}}">
+                <view class="title">您平均每天花多少时间投资？</view>
+                <repeat for="{{compData5}}" key="index" index="index" item="item">
+                    <zjSlider5 :compData="item" @sliderChange.user="sliderChange"></zjSlider5>
+                </repeat>
+            </block>
+
+             <!-- 第六题 -->
+            <block wx:if="{{current == 6}}">
+                <view class="title">您一般会如何选股票？（可多选）</view>
+                <view class="inner-box">
+                    <view>
+                        <text class="btn btn-6 {{isChoosed6[0][0] ? 'active' : ''}}" @tap="sixChoose(0, 0)">朋友推荐</text>
+                        <text class="btn btn-6 {{isChoosed6[0][1] ? 'active' : ''}}" @tap="sixChoose(0, 1)">利好消息</text>
+                        <text class="btn {{isChoosed6[0][2] ? 'active' : ''}}" @tap="sixChoose(0, 2)">基金重仓</text>
+                        <text class="btn btn-6 {{isChoosed6[0][3] ? 'active' : ''}}" @tap="sixChoose(0, 3)">基本面</text>
+                        <text class="btn btn-6 {{isChoosed6[0][4] ? 'active' : ''}}" @tap="sixChoose(0, 4)">技术面</text>
+                    </view>
+                </view>
+                <view class="title title-6">您一般会如何选基金？（可多选）</view>
+                <view class="inner-box">
+                    <view>
+                        <text class="btn btn-6 {{isChoosed6[1][0] ? 'active' : ''}}" @tap="sixChoose(1, 0)">朋友推荐</text>
+                        <text class="btn btn-6 {{isChoosed6[1][1] ? 'active' : ''}}" @tap="sixChoose(1, 1)">收益排名</text>
+                        <text class="btn {{isChoosed6[1][2] ? 'active' : ''}}" @tap="sixChoose(1, 2)">基金股票</text>
+                        <text class="btn btn-6 {{isChoosed6[1][3] ? 'active' : ''}}" @tap="sixChoose(1, 3)">基金经理</text>
+                        <text class="btn btn-6 {{isChoosed6[1][4] ? 'active' : ''}}" @tap="sixChoose(1, 4)">热门概念</text>
+                    </view>
+                </view>
+            </block>
+
+            <!-- 第七题 -->
+            <block wx:if="{{current == 7}}">
+                <view class="title">和银行理财相比，您对投资产品收益期望是？</view>
+                <!-- <zjSlider7 :compData="compData7" @sliderChange.user="sliderChange"></zjSlider7> -->
+                <repeat for="{{compData7}}" key="index" index="index" item="item">
+                    <zjSlider7 :compData="item" @sliderChange.user="sliderChange"></zjSlider7>
+                </repeat>
+                <text class="btn btn-b btn-7 {{isChoosed7 ? 'active' : ''}}" @tap="sevenChoose">期望跑赢大盘就可以</text>
+            </block>
+
+            <!-- 第八题 -->
+            <block wx:if="{{current == 8}}">
+                <view class="title">您在2015-2018年的投资收益如何？</view>
+                <repeat for="{{compData8}}" key="index" index="index" item="item">
+                    <zjSlider8 :compData="item" @sliderChange.user="sliderChange"></zjSlider8>
+                </repeat>
+                <text class="btn btn-b btn-8 {{isChoosed8 ? 'active' : ''}}" @tap="eightChoose">其实我并不清楚</text>
+            </block>
+
+            <!-- 第九题 -->
+            <block wx:if="{{current == 9}}">
+                <view class="title">当某支股票或者基金出现浮亏10%？（单选）</view>
+                <view class="inner-box">
+                    <view>
+                        <text class="btn btn-b btn-9 {{isChoosed9[0] ? 'active' : ''}}" @tap="nineChoose(0)">正常波动，不去理会</text>
+                        <text class="btn btn-b btn-9 {{isChoosed9[1] ? 'active' : ''}}" @tap="nineChoose(1)">咬咬牙，再等等反弹</text>
+                        <text class="btn btn-b btn-9 {{isChoosed9[2] ? 'active' : ''}}" @tap="nineChoose(2)">卖出一部分货或者全部止损</text>
+                        <text class="btn btn-b btn-9 {{isChoosed9[3] ? 'active' : ''}}" @tap="nineChoose(3)">继续找机会补仓拉低成本</text>
+                        <text class="btn btn-b btn-9 {{isChoosed9[4] ? 'active' : ''}}" @tap="nineChoose(4)">研究有没有可以替代的股票</text>
+                    </view>
+                </view>
+            </block>
+        </view>
+
+        <button wx:if="{{canGoNext}}" class="button" @tap="goNext">{{current == 9 ? '生成报告' : '下一题'}}</button>
+        <button wx:else class="button disable" >{{current == 9 ? '生成报告' : '下一题'}}</button>
+        <view wx:if="{{current > 1}}" class="h3 back" @tap="goPre">上一题</view>
+        <toast />
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import Toast from 'wepy-com-toast'
+import ZjSlider from '@/components/zjSlider'
+import { GET, POST } from '@/utils/myfetch'
+
+export default class Index extends wepy.page {
+    config = {
+        navigationBarTitleText: '财富测试',
+        disableScroll: true
+    }
+    components = {
+        toast: Toast,
+        zjSlider1: ZjSlider,
+        zjSlider2: ZjSlider,
+        zjSlider4: ZjSlider,
+        zjSlider5: ZjSlider,
+        zjSlider7: ZjSlider,
+        zjSlider8: ZjSlider
+    }
+
+    data = {
+        params: {},
+        current: 1,
+        canGoNext: false,
+        btnState: [],
+        compData1: { id:'slider1', title:'投资', unit:'万', default:'0万', min:0, max:20, value:0, specialType:'1' },
+        compData2: [
+            { id:'slider21', title:'理财类（银行）', unit:'万', default:'0万', min:0, max:300, value:0, step:5 },
+            { id:'slider22', title:'投资类（股票/基金）', unit:'万', default:'0万', min:0, max:300, value:0, step:5 },
+            { id:'slider23', title:'海外资产（股票/基金）', unit:'万', default:'0万', min:0, max:300, value:0, step:5 },
+            { id:'slider24', title:'另类投资（PE/VC/第三方固收）', unit:'万', default:'0万', min:0, max:300, value:0, step:5 },
+            { id:'slider25', title:'其他', unit:'万', default:'0万', min:0, max:300, value:0, step:5 }
+        ],
+        totalMoney: 0,
+        remainMoney: 0,
+        isChoosed3: [
+            [false, false, false],
+            [false, false, false],
+            [false, false, false]
+        ],
+        compData4: [
+            { id:'slider41', title:'股票', unit:'年', default:'2013年以前', min:2013, max:2018, value:2013, specialType:'2' },
+            { id:'slider42', title:'基金', unit:'年', default:'2013年以前', min:2013, max:2018, value:2013, specialType:'2' },
+            { id:'slider43', title:'互联网', unit:'年', default:'2013年以前', min:2013, max:2018, value:2013, specialType:'2' },
+            { id:'slider44', title:'海外资产', unit:'年', default:'2013年以前', min:2013, max:2018, value:2013, specialType:'2' }
+        ],
+        compData5: [
+            { id:'slider51', title:'查看持仓', unit:'分钟', default:'0分钟', min:0, max:60, value:0, step:5 },
+            { id:'slider52', title:'研究股票或者基金', unit:'分钟', default:'0分钟', min:0, max:60, value:0, step:5 },
+            { id:'slider53', title:'阅读财经新闻', unit:'分钟', default:'0分钟', min:0, max:60, value:0, step:5 },
+            { id:'slider54', title:'观看投顾推荐', unit:'分钟', default:'0分钟', min:0, max:60, value:0, step:5 }
+        ],
+        isChoosed6: [
+            [false, false, false, false, false],
+            [false, false, false, false, false]
+        ],
+        compData7: [
+            { id:'slider7', title:'超额收益', title2:'最大可能损失', tip:'（收益越大风险越大）', unit:'%', default:'0%', min:0, max:30, value:0 }
+        ],
+        isChoosed7: false,
+        compData8: [
+            { id:'slider81', title:'2015年', unit:'%', default:'0%', min:-30, max:30, value:0, step:2 },
+            { id:'slider82', title:'2016年', unit:'%', default:'0%', min:-30, max:30, value:0, step:2 },
+            { id:'slider83', title:'2017年', unit:'%', default:'0%', min:-30, max:30, value:0, step:2 }
+        ],
+        isChoosed8: false,
+        isChoosed9: [false, false, false, false, false]
+    }
+    onLoad(options) {
+        this.params = options
+        this.params.result = []
+    }
+    methods = {
+        sliderChange(...args) {
+            this.setBtnState(true)
+            let $event = args[1]
+            if (this.current == 2) {
+                let used = 0
+                this.compData2.forEach(item => {
+                    used += item.value
+                })
+                this.remainMoney = this.totalMoney - used
+            }
+        },
+        // 第3题
+        threeChoose(m, n) {
+            this.isChoosed3[m][n] = !this.isChoosed3[m][n]
+            let tempArr = []
+            this.isChoosed3.forEach(item => {
+                tempArr.push(item[0] || item[1] || item[2])
+            })
+            if (tempArr[0] && tempArr[1] && tempArr[2]){
+                this.setBtnState(true)
+            } else {
+                this.setBtnState(false)
+            }
+        },
+        // 第6题
+        sixChoose(m, n) {
+            this.isChoosed6[m][n] = !this.isChoosed6[m][n]
+            let tempArr = []
+            this.isChoosed6.forEach(item => {
+                tempArr.push(item[0] || item[1] || item[2] || item[3] || item[4])
+            })
+            if (tempArr[0] && tempArr[1]){
+                this.setBtnState(true)
+            } else {
+                this.setBtnState(false)
+            }
+        },
+        // 第7题
+        sevenChoose() {
+            this.isChoosed7 = !this.isChoosed7
+            this.setBtnState(this.isChoosed7)
+            this.compData7.forEach(item => {
+                if (this.isChoosed7) {
+                    item.value = 0
+                }
+                item.disabled = this.isChoosed7
+            })
+            // TODO：为什么这样不生效
+            // if (this.isChoosed7) {
+            //     this.compData7.value = 0
+            // }
+            // this.compData7.disabled = this.isChoosed7
+        },
+        // 第8题
+        eightChoose() {
+            this.isChoosed8 = !this.isChoosed8
+            this.setBtnState(this.isChoosed8)
+            this.compData8.forEach(item => {
+                if (this.isChoosed8) {
+                    item.value = 0
+                }
+                item.disabled = this.isChoosed8
+            })
+        },
+        // 第9题
+        nineChoose(n) {
+            if (this.isChoosed9[n]) {
+                this.isChoosed9[n] = false
+                this.setBtnState(false)
+            } else {
+                this.isChoosed9 = [false, false, false, false, false]
+                this.isChoosed9[n] = true
+                this.setBtnState(true)
+            }
+        },
+        // 上一题
+        goPre() {
+            this.current--
+            this.checkBtnState()
+        },
+        // 下一题
+        goNext() {
+            if (this.current == 1) {
+                // 当前选择金额是第二题总共可配置金额
+                let realNum = this.transNum(this.compData1.value)
+                this.totalMoney = realNum
+                this.remainMoney = realNum
+                this.params.result[0] = {
+                    value: realNum
+                }
+                this.compData2.forEach(item => {
+                    item.max = realNum
+                })
+            }
+            if (this.current == 2) {
+                let tempArr = []
+                this.compData2.forEach(item => {
+                    tempArr.push(item.value)
+                })
+                this.params.result[1] = {
+                    value: tempArr
+                }
+            }
+            if (this.current == 3) {
+                this.params.result[2] = {
+                    option1: this.isChoosed3[0],
+                    option2: this.isChoosed3[1],
+                    option3: this.isChoosed3[2]
+                }
+            }
+            if (this.current == 4) {
+                let tempArr = []
+                this.compData4.forEach(item => {
+                    tempArr.push(item.value)
+                })
+                this.params.result[3] = {
+                    value: tempArr
+                }
+            }
+            if (this.current == 5) {
+                let tempArr = []
+                this.compData5.forEach(item => {
+                    tempArr.push(item.value)
+                })
+                this.params.result[4] = {
+                    value: tempArr
+                }
+            }
+            if (this.current == 6) {
+                this.params.result[5] = {
+                    option1: this.isChoosed6[0],
+                    option2: this.isChoosed6[1]
+                }
+            }
+            if (this.current == 7) {
+                this.params.result[6] = {
+                    isSkipped: this.isChoosed7,
+                    value: this.compData7[0].value
+                }
+            }
+            if (this.current == 8) {
+                let tempArr = []
+                this.compData8.forEach(item => {
+                    tempArr.push(item.value)
+                })
+                this.params.result[7] = {
+                    isSkipped: this.isChoosed8,
+                    value: tempArr
+                }
+            }
+            if (this.current == 9) {
+                this.params.result[8] = {
+                    value: this.isChoosed9
+                }
+                this.confirm()
+                return
+            }
+            // 进入下一题
+            this.current++
+            this.checkBtnState()
+        }
+    }
+
+    // 保存按钮是否可点击状态，改变当前状态
+    setBtnState = function(state) {
+        this.canGoNext = state
+        this.btnState[this.current - 1] = state
+    }
+    // 获取该题目下按钮是否可点击状态
+    checkBtnState = function() {
+        this.canGoNext = this.btnState[this.current - 1] || false
+    }
+    // 转换题目1的value
+    transNum = function(num) {
+        if (num <= 10){
+            return num * 5
+        } else {
+            let realNum = 50 + (num - 10) * 25
+            return realNum
+        }
+    }
+    confirm = async function() {
+        console.log(this.params)
+        Tips.loading()
+        try {
+            let {res} = await POST('/api/superkit/set_answers/', {owner_user_id: 0, answers: JSON.stringify(this.params)})
+            console.log(res)
+            Tips.loaded()
+            this.$navigate('./result')
+        } catch (e) {
+            Tips.error('处理出错：', e)
+        }
+    }
+}
+</script>
