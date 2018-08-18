@@ -6,13 +6,15 @@
 </style>
 
 <template>
-    <canvas class="ec-canvas" canvas-id="eChart" @touchend="touchEnd"></canvas>
+    <canvas class="ec-canvas" canvas-id="eChart" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd"></canvas>
 </template>
 
 <script>
 import wepy from 'wepy'
 import * as echarts from '../plugins/ec-canvas/echarts'
 import WxCanvas from '../plugins/ec-canvas/wx-canvas'
+
+let boltChart = null;
 
 export default class ecCanvas extends wepy.component {
     props = {
@@ -23,12 +25,6 @@ export default class ecCanvas extends wepy.component {
             type: String,
             default: 'eChart'
         }
-    }
-
-    data = {
-        ec: null,
-        canvasId: null,
-        chart: null
     }
 
     onLoad() {
@@ -47,7 +43,7 @@ export default class ecCanvas extends wepy.component {
         var query = wx.createSelectorQuery().in(this.$wxpage)
         query.select('.ec-canvas').boundingClientRect(res => {
             if (this.ec && this.ec.onInit) {
-            this.chart = this.ec.onInit(canvas, res.width, res.height)
+               boltChart = this.ec.onInit(canvas, res.width, res.height)
             }
         }).exec()
     }
@@ -55,22 +51,22 @@ export default class ecCanvas extends wepy.component {
     methods = {
         touchStart(e) {
             console.log("touchStart")
-            if (this.chart && e.touches.length > 0) {
+            if (boltChart && e.touches.length > 0) {
                 var touch = e.touches[0]
-                this.chart._zr.handler.dispatch('mousedown', {
+                boltChart._zr.handler.dispatch('mousedown', {
                     zrX: touch.x,
                     zrY: touch.y
                 })
-                this.chart._zr.handler.dispatch('mousemove', {
+                boltChart._zr.handler.dispatch('mousemove', {
                     zrX: touch.x,
                     zrY: touch.y
                 })
             }
         },
         touchMove(e) {
-            if (this.chart && e.touches.length > 0) {
+            if (boltChart && e.touches.length > 0) {
                 var touch = e.touches[0];
-                this.chart._zr.handler.dispatch('mousemove', {
+                boltChart._zr.handler.dispatch('mousemove', {
                     zrX: touch.x,
                     zrY: touch.y
                 })
@@ -78,14 +74,14 @@ export default class ecCanvas extends wepy.component {
         },
         touchEnd(e) {
             console.log("touchEnd")
-            if (this.chart) {
+            if (boltChart) {
                 console.log(e.changedTouches)
                 var touch = e.changedTouches ? e.changedTouches[0] : {}
-                this.chart._zr.handler.dispatch('mouseup', {
+                boltChart._zr.handler.dispatch('mouseup', {
                     zrX: touch.x,
                     zrY: touch.y
                 })
-                this.chart._zr.handler.dispatch('click', {
+                boltChart._zr.handler.dispatch('click', {
                     zrX: touch.x,
                     zrY: touch.y
                 })
